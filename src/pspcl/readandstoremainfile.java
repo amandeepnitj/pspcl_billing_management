@@ -13,14 +13,19 @@ import java.sql.PreparedStatement;
 import java.sql.*;
 import java.text.*;
 import java.util.Locale;
+import java.util.Calendar;
 
 /**
  *
  * @author amandeep
  */
 public class readandstoremainfile {
-        
-    void readmainfile(Connection con,String file_path)
+    Connection con;
+    readandstoremainfile(Connection con)
+    {
+        this.con =con;
+    }
+    void readmainfile(String file_path)
     {
         int count=0;
         int batch_size=20;
@@ -90,15 +95,16 @@ public class readandstoremainfile {
                 } 
                 statement.executeBatch(); // remaining if any
                 con.commit();
-                con.close();
+                
                 }
                 catch (Exception e) {
                     System.out.println(e);
                 }
+        System.out.println("mainfile function completed");
     }
     
     
-    boolean checkaccountno(Connection con)
+    boolean checkaccountno()
     {
         boolean p=false;
         try
@@ -115,19 +121,63 @@ public class readandstoremainfile {
         {
             p=true;
         }
-        
+       
         }
         catch(Exception e)
         {
                 System.out.println(e);
         }
+        System.out.println("account check function completed");
         return p;
     }
     
     
-    void setdbdate(Connection con)
+    void setdbdate()
     {
+        try
+        {
+        String query="select max(billing_date) from pspcl.basic_main_table";
+        Statement st = con.createStatement();
+        ResultSet rs =st.executeQuery(query);
+        con.commit();
+        Calendar c = Calendar.getInstance();
+        java.util.Date olddate=c.getTime();
+        if(rs.next())
+        {
+           System.out.println(rs.getDate(1));
+           olddate=rs.getDate(1);
+        }
+        else
+        {
+            //p=true;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         
+        c.setTime(olddate);
+        c.add(Calendar.DAY_OF_MONTH, 15); 
+        String newDate = sdf.format(c.getTime()); 
+        System.out.println("newdate "+newDate);
+        //new date fetched
+        
+        
+        
+        query="insert into pspcl.agg_main_table select cycle,person_name,father_name,account_no,category,due_amount,'"+ newDate +"',billing_group,current_date from pspcl.basic_main_table ";
+        Statement st2 = con.createStatement();
+        st2.execute(query);
+        con.commit();
+        System.out.println("agg_main_table table insertion");
+       
+        }
+        catch(Exception e)
+        {
+                System.out.println(e);
+        }
+        System.out.println("setdbdate function completed");
+    }
+    
+    void con_close() throws Exception
+    {
+        con.close();
     }
     
 }

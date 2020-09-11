@@ -23,47 +23,68 @@ public class Pspcl {
      */
     public static void main(String[] args) throws Exception {
        
-     /*   //readmainfile
-        Connection con0 =new jdbcconnect().initconn();
-        con0.setAutoCommit(false);
+        Connection con_main =new jdbcconnect().initconn();
+        Connection con_cashpayment =new jdbcconnect().initconn();
+        Connection con_epayment =new jdbcconnect().initconn();
+        con_main.setAutoCommit(false);
+        con_cashpayment.setAutoCommit(false);
+        con_epayment.setAutoCommit(false);
+        readandstoremainfile main_obj = new readandstoremainfile(con_main);
+        epayment_todb epayment_obj = new epayment_todb(con_epayment);
+        cashtodb cashpayment_obj = new cashtodb(con_cashpayment);
+        
+       //main --- readmainfile        
         String filepath="C:\\java lib\\upload data bg4 cy-2\\web-T53024.txt";
-        new readandstoremainfile().readmainfile(con0,filepath);
-       */ 
+        main_obj.readmainfile(filepath);
+    
+    
+    
+        //main --- check account no from main file
+        boolean p= main_obj.checkaccountno();
+        System.out.println(p);
+    
+    
+    
+    
+    //main --- get max date and insert to main table
+        main_obj.setdbdate();
+
+                  
+
+        //epay -- fetch e-payment data
         
-        //check account no
-        Connection con1 =new jdbcconnect().initconn();
-        con1.setAutoCommit(false);
-        boolean p= new readandstoremainfile().checkaccountno(con1);
-        System.out.print(p);
+        String excel_dir = "C:\\Users\\amandeep\\Desktop\\payment_1.xls";
+        epayment_obj.e_paymentbasictable(excel_dir);
         
-    /*    
-        //fetch e-payment data
-        Connection con =new jdbcconnect().initconn();
-        con.setAutoCommit(false);
-        String excel_dir = "C:\\Users\\amandeep\\Desktop\\e_payment.xlsx";
-        con.setAutoCommit(false);
-        new epayment_todb().paymenttodb(con,excel_dir);
-        
-        //udpated agg e-payment table
-        Connection con1 =new jdbcconnect().initconn();
-        con1.setAutoCommit(false);
-        new epayment_todb().agg_table(con1);
+    
+        //epay -- udpated agg e-payment table
+        epayment_obj.agg_epayment_table();
       
-      
-      
-        //fetch the cash file
+
+
+
+
+        //cash -- fetch the cash file
         String cashfile = "C:\\Users\\amandeep\\Desktop\\cashfile.txt";
-        Connection con2 =new jdbcconnect().initconn();
-        con2.setAutoCommit(false);
-        new cashtodb().cashfilereadtodb(con2,cashfile);
+        
+        cashpayment_obj.cashfilereadtodb(cashfile);
         
         
-        // add agg_cash_data
-        Connection con3 =new jdbcconnect().initconn();
-        con3.setAutoCommit(false);
-        new cashtodb().agg_cash_table(con3);
+        //cash --  validate and store payments
         
-      */  
+        boolean p_1= cashpayment_obj.validateandstoredpayment();
+        System.out.println(p_1);
+        
+        
+        //cash --  add agg_cash_data
+        
+        cashpayment_obj.agg_cash_table();
+              
+
+       main_obj.con_close();
+       cashpayment_obj.con_close();
+       epayment_obj.con_close();
+       
           
 }  
 }  
