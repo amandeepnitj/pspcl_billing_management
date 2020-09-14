@@ -34,53 +34,82 @@ public class Pspcl {
         cashtodb cashpayment_obj = new cashtodb(con_cashpayment);
         
        //main --- readmainfile        
-        String filepath="C:\\java lib\\upload data bg4 cy-2\\web-T53024.txt";
-        main_obj.readmainfile(filepath);
+//        String filepath=System.getProperty("user.home")+"\\pspcl\\web-T53024.txt";
+//        main_obj.readmainfile(filepath);
     
     
     
         //main --- check account no from main file
-        boolean p= main_obj.checkaccountno();
-        System.out.println(p);
+//        boolean p= main_obj.checkaccountno();
+//        System.out.println(p);
     
     
     
     
     //main --- get max date and insert to main table
-        main_obj.setdbdate();
+//        main_obj.setdbdate();
 
                   
 
         //epay -- fetch e-payment data
         
-        String excel_dir = "C:\\Users\\amandeep\\Desktop\\payment_1.xls";
-        epayment_obj.e_paymentbasictable(excel_dir);
+//        String excel_dir = "C:\\Users\\amandeep\\Desktop\\payment_1.xls";
+//        epayment_obj.e_paymentbasictable(excel_dir);
         
     
         //epay -- udpated agg e-payment table
-        epayment_obj.agg_epayment_table();
+//        epayment_obj.agg_epayment_table();
       
 
 
 
 
         //cash -- fetch the cash file
-        String cashfile = "C:\\Users\\amandeep\\Desktop\\cashfile.txt";
-        
-        cashpayment_obj.cashfilereadtodb(cashfile);
+//        String cashfile = "C:\\Users\\amandeep\\Desktop\\cashfile.txt";
+//        cashpayment_obj.cashfilereadtodb(cashfile);
         
         
         //cash --  validate and store payments
         
-        boolean p_1= cashpayment_obj.validateandstoredpayment();
-        System.out.println(p_1);
+//        boolean p_1= cashpayment_obj.validateandstoredpayment();
+//        System.out.println(p_1);
         
         
         //cash --  add agg_cash_data
         
-        cashpayment_obj.agg_cash_table();
+//        cashpayment_obj.agg_cash_table();
               
 
+        
+        //payment process
+        {
+            String excel_dir1 = System.getProperty("user.home")+"\\pspcl\\payment_1.xls";
+            epayment_obj.e_paymentbasictable(excel_dir1);
+            
+            
+            String cashfile1 = System.getProperty("user.home")+"\\pspcl\\cashfile.txt";
+            cashpayment_obj.cashfilereadtodb(cashfile1);
+            
+            boolean p1= cashpayment_obj.validatewithstoredpayment();
+            System.out.println(p1);
+            
+            if(p1)
+            {
+                cashpayment_obj.agg_stored_payment();
+            }
+            
+            
+            
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
        main_obj.con_close();
        cashpayment_obj.con_close();
        epayment_obj.con_close();

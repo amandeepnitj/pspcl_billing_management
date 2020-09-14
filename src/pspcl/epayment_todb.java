@@ -59,9 +59,9 @@ public class epayment_todb {
                 Statement st = con.createStatement();
                 st.execute(truncate);
                 con.commit();
-                System.out.println("table truncated");
+                System.out.println("basic_e_payment table truncated");
                 String str;
-                String sql = "INSERT INTO pspcl.basic_e_payment (account_no, amount,receiptid,receiptdate) VALUES (?, ?, ? ,?)";
+                String sql = "INSERT INTO pspcl.basic_e_payment (account_no, amount,receiptid,receiptdate,partition_date) VALUES (?, ?, ? ,?,current_date)";
                 PreparedStatement statement = con.prepareStatement(sql);
                 boolean p=false;
                 while ((str = in.readLine()) != null) {

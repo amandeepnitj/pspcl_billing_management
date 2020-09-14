@@ -34,7 +34,7 @@ public class cashtodb {
         Statement st = con.createStatement();
         st.execute(truncate);
         con.commit();
-        System.out.println("cash table table truncated");
+        System.out.println("basic_cash_payment table truncated");
         } catch(Exception e){
             System.out.println(e);
         }
@@ -43,7 +43,7 @@ public class cashtodb {
         try(
                 BufferedReader in = new BufferedReader(new FileReader(cash_file))) {
                 String str;
-                String sql = "INSERT INTO pspcl.basic_cash_payment (account_no,amount,receiptid,receiptdate) VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO pspcl.basic_cash_payment (account_no,amount,receiptid,receiptdate,partition_date) VALUES (?, ?, ?, ?,current_date)";
                 PreparedStatement statement = con.prepareStatement(sql);
                     String s= "0123456789";
                     while ((str = in.readLine()) != null) {
@@ -63,7 +63,18 @@ public class cashtodb {
                                 
                                 String account_no = trim(tokens[3]);
 //                                System.out.println(trim(tokens[n-1]));
-                                int amount = Integer.parseInt(tokens[n-2]);
+                                String amount_s="";
+                                for(int i=n-1;i>=0;i--)
+                                {
+                                    char c1=tokens[i].charAt(0);
+                                    if(s.indexOf(c1)!=-1)
+                                    {
+                                        amount_s=tokens[i];
+                                        break;
+                                    }
+                                    
+                                }
+                                int amount = Integer.parseInt(amount_s);
                                 String date=trim(tokens[0]);
                                 String receiptid=trim(tokens[2]);
                                  String receiptdate=  date;
@@ -111,7 +122,7 @@ public class cashtodb {
         }
     }
     
-    boolean validateandstoredpayment() throws Exception
+    boolean validatewithstoredpayment() throws Exception
     {
         boolean cash_check=false;
         boolean epayment_check=false;
@@ -153,7 +164,7 @@ public class cashtodb {
         }
         if(!(cash_check&&epayment_check))
             return false;
-        String query="insert into pspcl.stored_payment select receiptid,receiptdate,account_no,amount,current_date from pspcl.basic_cash_payment ";
+        /*String query="insert into pspcl.stored_payment select receiptid,receiptdate,account_no,amount,current_date from pspcl.basic_cash_payment ";
         Statement st2 = con.createStatement();
         st2.execute(query);
         con.commit();
@@ -161,7 +172,7 @@ public class cashtodb {
         Statement st3 = con.createStatement();
         st3.execute(query);
         con.commit();
-        
+        */
         return true;
     }
     void agg_cash_table()
@@ -184,6 +195,59 @@ public class cashtodb {
         {
             System.out.println(e);
         }
+        
+        
+    }
+    
+    void agg_stored_payment() throws Exception
+    {
+        String query="truncate table pspcl.agg_stored_payment";
+        Statement st2 = con.createStatement();
+        st2.execute(query);
+        con.commit();
+        System.out.println("agg_stored_payment table truncated");        
+        
+        
+        
+        query="insert into pspcl.agg_stored_payment SELECT p.account_no,p.amount,p.receiptid,p.receiptdate from pspcl.basic_e_payment p,pspcl.agg_main_table m where m.account_no=p.account_no and p.receiptdate>=date_sub(current_date(),INTERVAL 50 DAY) ";
+        Statement st3 = con.createStatement();
+        st3.execute(query);
+        con.commit();
+        System.out.println("agg_stored_payment table insertion -- epayment");        
+        
+        
+        query="insert into pspcl.agg_stored_payment SELECT p.account_no,p.amount,p.receiptid,p.receiptdate from pspcl.basic_cash_payment p,pspcl.agg_main_table m where m.account_no=p.account_no and p.receiptdate>=date_sub(current_date(),INTERVAL 50 DAY) ";
+        Statement st4 = con.createStatement();
+        st4.execute(query);
+        con.commit();
+        System.out.println("agg_stored_payment table insertion -- cash_payment");        
+        
+        
+        
+        query="insert into pspcl.stored_payment select receiptid,receiptdate,account_no,amount,current_date from pspcl.agg_stored_payment ";
+        Statement st5 = con.createStatement();
+        st5.execute(query);
+        con.commit();
+        System.out.println("data stored to stored_payment from agg_stored_payment");        
+        
+        query="delete from pspcl.stored_payment where partition_date<date_sub(current_date,INTERVAL 5 MONTH) ";
+        Statement st6 = con.createStatement();
+        st6.execute(query);
+        con.commit();
+        System.out.println("retention period enabled");        
+        
+        
+        query="truncate table pspcl.final_payment";
+        Statement st7 = con.createStatement();
+        st7.execute(query);
+        con.commit();
+        System.out.println("final_payment table truncated");        
+        
+        query="insert into pspcl.final_payment select account_no,sum(amount) from pspcl.agg_stored_payment group by account_no";
+        Statement st8 = con.createStatement();
+        st8.execute(query);
+        con.commit();
+        System.out.println("final_payment table insertion");        
         
         
     }
