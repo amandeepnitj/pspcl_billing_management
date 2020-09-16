@@ -6,7 +6,6 @@
 package pspcl;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
@@ -79,6 +78,11 @@ public class main_frame extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         cash_payment_date = new javax.swing.JLabel();
+        uploadbtn = new javax.swing.JButton();
+        updatebtn = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        updateta = new javax.swing.JTextArea();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -144,9 +148,10 @@ public class main_frame extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 60, 370, 30);
+        jPanel2.setBounds(0, 50, 370, 30);
 
-        jLabel1.setText("pspcl");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setText("PSPCL");
         getContentPane().add(jLabel1);
         jLabel1.setBounds(0, 0, 180, 20);
 
@@ -165,7 +170,7 @@ public class main_frame extends javax.swing.JFrame {
         jpb1.getAccessibleContext().setAccessibleDescription("");
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(0, 90, 370, 180);
+        jScrollPane1.setBounds(0, 80, 370, 180);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
@@ -249,12 +254,71 @@ public class main_frame extends javax.swing.JFrame {
         getContentPane().add(jPanel1);
         jPanel1.setBounds(380, 50, 310, 100);
 
+        uploadbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        uploadbtn.setText("Upload File");
+        uploadbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadbtnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(uploadbtn);
+        uploadbtn.setBounds(400, 200, 100, 30);
+
+        updatebtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        updatebtn.setText("Update ");
+        getContentPane().add(updatebtn);
+        updatebtn.setBounds(550, 200, 90, 30);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        updateta.setColumns(20);
+        updateta.setRows(5);
+        updateta.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jScrollPane2.setViewportView(updateta);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+        );
+
+        getContentPane().add(jPanel3);
+        jPanel3.setBounds(20, 290, 350, 100);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void exit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_buttonActionPerformed
         this.dispose();
     }//GEN-LAST:event_exit_buttonActionPerformed
+
+    private void uploadbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadbtnActionPerformed
+        try{
+            Connection con_main =new jdbcconnect().initconn();
+            con_main.setAutoCommit(false);
+            readandstoremainfile main_obj = new readandstoremainfile(con_main);
+            String filepath=System.getProperty("user.home")+"\\pspcl\\web-T53024.txt";
+            main_obj.readmainfile(filepath);
+            boolean T53= main_obj.checkaccountno();
+            if(T53)
+           {
+                
+            }
+            else
+            {
+                
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.print(e);
+        }
+    }//GEN-LAST:event_uploadbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -310,8 +374,13 @@ public class main_frame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel jpb1;
+    private javax.swing.JButton updatebtn;
+    private javax.swing.JTextArea updateta;
+    private javax.swing.JButton uploadbtn;
     // End of variables declaration//GEN-END:variables
 
 
@@ -338,13 +407,18 @@ void fetch_detail()
                al1.add(new file_detail(rs1.getInt("billing_group"),rs1.getInt("cycle"),rs1.getString("date1")));
                System.out.println(al1.size());
         }
+        LocalDate olddate = LocalDate.parse(al1.get(0).date);
+        LocalDate newdate=olddate.minusDays(50);
+        cash_payment_date1.setText(newdate+"");
+        e_payment_date1.setText(newdate+"");
         System.out.println("array completed");
         printfollowing();
-        
+        con.close();
         }
         catch(Exception e){
             System.out.println(e);
         }
+        
         
 }
 void printfollowing() {
@@ -441,6 +515,7 @@ void e_payment_date()
             date=rs1.getString("date1");
         }
         e_payment_date.setText(date);
+        con.close();
         
     }
         catch(Exception e)
@@ -465,10 +540,11 @@ void cash_payment_date()
             date=rs1.getString("date1");
         }
         cash_payment_date.setText(date);
+        con.close();
     }
         catch(Exception e)
         {
-            
+            System.out.println(e);
         }
    
 }
