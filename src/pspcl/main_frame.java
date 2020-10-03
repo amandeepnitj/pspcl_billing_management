@@ -6,18 +6,25 @@
 package pspcl;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JWindow;
 import static javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -30,20 +37,28 @@ import javax.swing.border.EtchedBorder;
 public class main_frame extends javax.swing.JFrame {
 
     ArrayList<file_detail> al1 = new ArrayList<>();
+    ArrayList<JPanel> al2 = new ArrayList<>();
     int y3=0;
     String bill_date;
+    waiting w;
     /**
      * Creates new form main_frame
      */
     public main_frame() {
         initComponents();
         this.setVisible(true);
-        this.setSize(697,414);
+       this.setSize(1184,573);
+       jPanel6.setSize(1184,573);
         this.setResizable(false);
-        this.setLocation(400, 50);
+        this.setLocation(50, 50);
+        updateta.setEditable(false);
         jScrollPane1.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
-        exit_button.setVisible(true); 
+         
         
+       
+        Font f= updateta.getFont();
+        Font f1= new Font(f.getFontName(),f.getStyle(),f.getSize()+5);
+        updateta.setFont(f1);
         e_payment_date();
         fetch_detail();
         cash_payment_date();
@@ -59,215 +74,76 @@ public class main_frame extends javax.swing.JFrame {
     private void initComponents() {
 
         jCheckBox1 = new javax.swing.JCheckBox();
-        exit_button = new javax.swing.JButton();
+        updateta1 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jpb1 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        updateta = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        updatebtn = new javax.swing.JButton();
+        bgcb = new javax.swing.JComboBox<>();
+        cyclecb = new javax.swing.JComboBox<>();
+        jPanel5 = new javax.swing.JPanel();
+        uploadbtn = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jpb1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        e_payment_date = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        e_payment_date1 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        cash_payment_date1 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         cash_payment_date = new javax.swing.JLabel();
-        uploadbtn = new javax.swing.JButton();
-        updatebtn = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        updateta = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        cash_payment_date1 = new javax.swing.JLabel();
+        e_payment_date1 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        e_payment_date = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
 
         jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("pspcl");
-        setAlwaysOnTop(true);
-        setUndecorated(true);
+        setTitle("PSPCL DEFAULTING LIST GENERATOR");
         getContentPane().setLayout(null);
+        getContentPane().add(updateta1);
+        updateta1.setBounds(520, 220, 0, 0);
 
-        exit_button.setText("X");
-        exit_button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exit_buttonActionPerformed(evt);
-            }
-        });
-        getContentPane().add(exit_button);
-        exit_button.setBounds(650, 0, 50, 23);
+        jPanel6.setBackground(new java.awt.Color(98, 98, 98));
+        jPanel6.setEnabled(false);
+        jPanel6.setMinimumSize(new java.awt.Dimension(1184, 573));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel2.setBackground(new java.awt.Color(153, 133, 143));
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("PSPCL DEFAULTING LIST GENERATOR ");
+        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        jPanel6.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 2, 440, 40));
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("Billing group");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.black));
-        jLabel3.setPreferredSize(new java.awt.Dimension(99, 28));
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Billing Cycle");
-        jLabel4.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.black));
-        jLabel4.setPreferredSize(new java.awt.Dimension(97, 28));
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("Billing Date");
-        jLabel5.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.black));
-        jLabel5.setPreferredSize(new java.awt.Dimension(91, 28));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 50, 370, 30);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("PSPCL");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(0, 0, 180, 20);
+        jpb1.setBackground(new java.awt.Color(45, 84, 94));
+        jpb1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
         javax.swing.GroupLayout jpb1Layout = new javax.swing.GroupLayout(jpb1);
         jpb1.setLayout(jpb1Layout);
         jpb1Layout.setHorizontalGroup(
             jpb1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 368, Short.MAX_VALUE)
+            .addGap(0, 397, Short.MAX_VALUE)
         );
         jpb1Layout.setVerticalGroup(
             jpb1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 178, Short.MAX_VALUE)
+            .addGap(0, 237, Short.MAX_VALUE)
         );
 
         jScrollPane1.setViewportView(jpb1);
         jpb1.getAccessibleContext().setAccessibleDescription("");
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(0, 80, 370, 180);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Cash-payment range");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.black));
-        getContentPane().add(jLabel2);
-        jLabel2.setBounds(530, 60, 140, 30);
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("E-payment range");
-        jLabel6.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, java.awt.Color.black));
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(380, 60, 130, 30);
-
-        e_payment_date.setBackground(new java.awt.Color(109, 121, 147));
-        e_payment_date.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        e_payment_date.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(e_payment_date);
-        e_payment_date.setBounds(420, 120, 90, 20);
-
-        jLabel7.setBackground(new java.awt.Color(109, 121, 147));
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("To:");
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(530, 120, 30, 20);
-
-        e_payment_date1.setBackground(new java.awt.Color(109, 121, 147));
-        e_payment_date1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        e_payment_date1.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(e_payment_date1);
-        e_payment_date1.setBounds(420, 100, 90, 20);
-
-        jLabel8.setBackground(new java.awt.Color(109, 121, 147));
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("From:");
-        getContentPane().add(jLabel8);
-        jLabel8.setBounds(530, 100, 40, 20);
-
-        cash_payment_date1.setBackground(new java.awt.Color(109, 121, 147));
-        cash_payment_date1.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        cash_payment_date1.setForeground(new java.awt.Color(255, 255, 255));
-        getContentPane().add(cash_payment_date1);
-        cash_payment_date1.setBounds(570, 100, 100, 20);
-
-        jLabel9.setBackground(new java.awt.Color(109, 121, 147));
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("From:");
-        getContentPane().add(jLabel9);
-        jLabel9.setBounds(380, 100, 40, 20);
-
-        jLabel10.setBackground(new java.awt.Color(109, 121, 147));
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("To:");
-        getContentPane().add(jLabel10);
-        jLabel10.setBounds(380, 120, 30, 20);
-
-        jPanel1.setBackground(new java.awt.Color(109, 121, 147));
-
-        cash_payment_date.setBackground(new java.awt.Color(109, 121, 147));
-        cash_payment_date.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        cash_payment_date.setForeground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(188, Short.MAX_VALUE)
-                .addComponent(cash_payment_date, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(69, Short.MAX_VALUE)
-                .addComponent(cash_payment_date, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        getContentPane().add(jPanel1);
-        jPanel1.setBounds(380, 50, 310, 100);
-
-        uploadbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        uploadbtn.setText("Upload File");
-        uploadbtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                uploadbtnActionPerformed(evt);
-            }
-        });
-        getContentPane().add(uploadbtn);
-        uploadbtn.setBounds(400, 200, 100, 30);
-
-        updatebtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        updatebtn.setText("Update ");
-        getContentPane().add(updatebtn);
-        updatebtn.setBounds(550, 200, 90, 30);
+        jPanel6.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 80, 371, 194));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -280,45 +156,622 @@ public class main_frame extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel3);
-        jPanel3.setBounds(20, 290, 350, 100);
+        jPanel6.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 305, -1, -1));
+
+        jPanel4.setBackground(new java.awt.Color(45, 84, 94));
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Select Billing Group and Cycle for which data is required");
+
+        updatebtn.setBackground(new java.awt.Color(45, 84, 94));
+        updatebtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        updatebtn.setForeground(new java.awt.Color(255, 255, 255));
+        updatebtn.setText("Update ");
+        updatebtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        updatebtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                updatebtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                updatebtnMouseExited(evt);
+            }
+        });
+        updatebtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updatebtnActionPerformed(evt);
+            }
+        });
+
+        bgcb.setBackground(new java.awt.Color(45, 84, 94));
+        bgcb.setForeground(new java.awt.Color(255, 255, 255));
+        bgcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BG-1", "BG-2", "BG-3", "BG-4" }));
+        bgcb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        cyclecb.setBackground(new java.awt.Color(45, 84, 94));
+        cyclecb.setForeground(new java.awt.Color(255, 255, 255));
+        cyclecb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cycle-1", "Cycle-2", "Cycle-3", "Cycle-4","Cycle-5","Cycle-6" }));
+        cyclecb.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addGap(56, 56, 56)
+                .addComponent(bgcb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57)
+                .addComponent(cyclecb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 147, Short.MAX_VALUE)
+                .addComponent(updatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49))
+            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(41, 41, 41)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updatebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bgcb)
+                    .addComponent(cyclecb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(572, 211, 476, -1));
+
+        jPanel5.setBackground(new java.awt.Color(45, 84, 94));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
+
+        uploadbtn.setBackground(new java.awt.Color(45, 84, 94));
+        uploadbtn.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        uploadbtn.setForeground(new java.awt.Color(255, 255, 255));
+        uploadbtn.setText("Insert File");
+        uploadbtn.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        uploadbtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                uploadbtnMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                uploadbtnMouseExited(evt);
+            }
+        });
+        uploadbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadbtnActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("Click here to Upload the main file");
+        jLabel12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(uploadbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(uploadbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel6.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(572, 382, -1, -1));
+
+        jPanel2.setBackground(new java.awt.Color(45, 84, 94));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Billing group");
+        jLabel3.setAlignmentY(2.0F);
+        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        jLabel3.setPreferredSize(new java.awt.Dimension(99, 28));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Billing Cycle");
+        jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        jLabel4.setPreferredSize(new java.awt.Dimension(97, 28));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 15)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel5.setText("Billing Date");
+        jLabel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        jLabel5.setPreferredSize(new java.awt.Dimension(91, 28));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 44, -1, -1));
+
+        jButton1.setFont(new java.awt.Font("Dialog", 0, 12)); // NOI18N
+        jButton1.setText("ADMIIN");
+        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 0, 90, 30));
+
+        jPanel1.setBackground(new java.awt.Color(45, 84, 94));
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 3));
+
+        cash_payment_date.setBackground(new java.awt.Color(109, 121, 147));
+        cash_payment_date.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        cash_payment_date.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Cash-payment range");
+        jLabel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("E-payment range");
+        jLabel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        cash_payment_date1.setBackground(new java.awt.Color(109, 121, 147));
+        cash_payment_date1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        cash_payment_date1.setForeground(new java.awt.Color(255, 255, 255));
+
+        e_payment_date1.setBackground(new java.awt.Color(109, 121, 147));
+        e_payment_date1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        e_payment_date1.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel9.setBackground(new java.awt.Color(109, 121, 147));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("From:");
+
+        e_payment_date.setBackground(new java.awt.Color(109, 121, 147));
+        e_payment_date.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        e_payment_date.setForeground(new java.awt.Color(255, 255, 255));
+
+        jLabel10.setBackground(new java.awt.Color(109, 121, 147));
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("To:");
+
+        jLabel13.setBackground(new java.awt.Color(109, 121, 147));
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("From:");
+
+        jLabel14.setBackground(new java.awt.Color(109, 121, 147));
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel14.setText("To:");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(e_payment_date1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(e_payment_date, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(100, 100, 100)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cash_payment_date1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cash_payment_date, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cash_payment_date1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(e_payment_date1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(e_payment_date, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cash_payment_date, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel6.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(572, 55, 476, -1));
+
+        getContentPane().add(jPanel6);
+        jPanel6.setBounds(0, 0, 1150, 520);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exit_buttonActionPerformed
-        this.dispose();
-    }//GEN-LAST:event_exit_buttonActionPerformed
-
     private void uploadbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadbtnActionPerformed
+//        new Thread(new Runnable() {
+//                        public void run() {
+//                            
+//                            updateta.append("\nPROCESSING");
+//                        }
+//                    }).start();
+        
+        new Thread(new Runnable() {
+                        public void run() {
+            w= new waiting();
+            updateta.append("\nPROCESSING");
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
         try{
+            
             Connection con_main =new jdbcconnect().initconn();
             con_main.setAutoCommit(false);
             readandstoremainfile main_obj = new readandstoremainfile(con_main);
-            String filepath=System.getProperty("user.home")+"\\pspcl\\web-T53024.txt";
+            String filepath=System.getProperty("user.home")+"\\Desktop\\pspcl\\webfile.txt";
+            w.show();
             main_obj.readmainfile(filepath);
             boolean T53= main_obj.checkaccountno();
+            w.suppress();
+            String update;
             if(T53)
-           {
+            {   
+                w.suppress();
+                updateta.append("\nPROCESSING: Main file is being inserted..");
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                
+                w.show();
+                update= main_obj.setdbdate();
+                w.suppress();
+                updateta.append(update);
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                
                 
             }
             else
             {
+                w.suppress();
+                updateta.append("\nData does not belong to Butari Sub-Divison");
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                
+                JOptionPane.showMessageDialog(updateta1,"Data does not belong to Butari Sub-Divison","ERROR",JOptionPane.ERROR_MESSAGE); 
                 
             }
+            w.suppress();
+            updateta.append("\nFile has been uploaded");
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+            JOptionPane.showMessageDialog(updateta1,"MAIN FILE HAS BEEN INSERTED"); 
+            con_main.close();
+            w.suppress();
         }
         catch(Exception e)
         {
+            w.suppress();
             System.out.print(e);
+            updateta.append("\nError: "+e);
+            
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+            w.close();
         }
+        fetch_detail();
+        w.close();
+         }
+                    }).start();
     }//GEN-LAST:event_uploadbtnActionPerformed
+
+    private void updatebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updatebtnActionPerformed
+        new Thread(new Runnable() {
+                        public void run() {
+            w= new waiting();
+            updateta.append("\nPROCESSING.......");
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+            
+        try{
+            //first check whether data of bg and cycle is there or not
+            w.show();
+            int bg=bgcb.getSelectedIndex();
+            int cycle=cyclecb.getSelectedIndex();
+            bg++;
+            cycle++;
+            Connection con =new jdbcconnect().initconn();
+            String query="select count(*) from pspcl.agg_main_table where cycle="+cycle+" and billing_group = "+bg;
+            Statement st1 = con.createStatement();
+            ResultSet rs1 =st1.executeQuery(query);
+            
+            w.suppress();
+            rs1.next();
+            if(rs1.getInt(1)==0)
+            {
+                w.suppress();
+                updateta.append("\nError: please upload data of selected BG and cycle first");
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                
+                JOptionPane.showMessageDialog(updateta1,"PLEASE UPLOAD DATA OF SELECETED BG AND CYCLE FIRST","ERROR",JOptionPane.ERROR_MESSAGE); 
+            }
+            else
+            {
+                w.show();
+                Connection con_cashpayment =new jdbcconnect().initconn();
+                Connection con_epayment =new jdbcconnect().initconn();
+                con_cashpayment.setAutoCommit(false);
+                con_epayment.setAutoCommit(false);
+                epayment_todb epayment_obj = new epayment_todb(con_epayment);
+                cashtodb cashpayment_obj = new cashtodb(con_cashpayment);
+
+                System.out.println("bg= "+bg+" cycle= "+cycle);
+                boolean epaymentexist=false,cashpaymentexists=false;
+                String excel_dir1 = System.getProperty("user.home")+"\\Desktop\\pspcl\\epayment.xls";
+                File file= new File(excel_dir1);
+                epaymentexist=file.exists();
+                int v1=-1;
+                if(epaymentexist==true)
+                {
+                    w.suppress();
+                    updateta.append("\nPROCESSING: EPAYMENT FILE IS BEING INSERTED.....");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+                    w.show();
+                    epayment_obj.e_paymentbasictable(excel_dir1,1);
+                    w.suppress();
+                }
+                else
+                {
+                    w.suppress();
+                    epayment_obj.e_paymentbasictable(excel_dir1,0);
+                    updateta.append("\nE-payment file does not exist");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+                    JOptionPane.showMessageDialog(updateta1,"E-PAYMENT FILE DOES NOT EXIST"); 
+                }
+
+                String cashfile = System.getProperty("user.home")+"\\Desktop\\pspcl\\cashpayment.txt";
+
+                file= new File(cashfile);
+                cashpaymentexists=file.exists();
+                if(cashpaymentexists==true)
+                {
+                    w.suppress();
+                    updateta.append("\nPROCESSING: Cashpayment file is being inserted..");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+                    w.show();
+                    cashpayment_obj.cashfilereadtodb(cashfile,1);
+                    w.suppress();
+                }
+                else
+                {
+                    w.show();
+                    cashpayment_obj.cashfilereadtodb(cashfile,0);
+                    w.suppress();
+                    updateta.append("\nCash-payment file does not exist");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+                    JOptionPane.showMessageDialog(updateta1,"CASH-PAYMENT FILE DOES NOT EXIST"); 
+                }
+                if(epaymentexist==true && cashpaymentexists==true)
+                {
+                    v1=0;
+                }
+                else if(epaymentexist==true && cashpaymentexists==false)
+                {
+                    v1=1;
+                }
+                else if(epaymentexist==false && cashpaymentexists==true)
+                {
+                    v1=2;
+                }
+                else
+                    v1=3;
+
+                w.show();
+                int v= cashpayment_obj.validatewithstoredpayment();
+                w.suppress();
+                System.out.println(v);
+                    switch (v) {
+                        case 0:
+                            w.suppress();
+                            break;
+                        case 1:
+                            w.suppress();
+                            updateta.append("\nCash-Payment file is already scanned");
+                            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                            
+                            JOptionPane.showMessageDialog(updateta1,"CASH-PAYMENT IS ALREADY SCANNED"); 
+                            
+                            break;
+                        case 2:
+                            w.suppress();
+                            updateta.append("\nE-Payment file is already scanned");
+                            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                            
+                            JOptionPane.showMessageDialog(updateta1,"E-PAYMENT IS ALREADY SCANNED"); 
+                            
+                            break;
+                        case 3:
+                            w.suppress();
+                            updateta.append("\nE-Payment file is already scanned");
+                            updateta.append("\nCash-Payment file is already scanned");
+                            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                            
+                            JOptionPane.showMessageDialog(updateta1,"BOTH CASH-PAYMENT AND E-PAYMENT ARE ALREADY SCANNED"); 
+                           
+                            break;
+                    }
+                    w.suppress();
+                    updateta.append("\nPROCESSING: DATA IS BEING PROCESSED.....");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+                    w.show();
+                    cashpayment_obj.agg_stored_payment(0,bg,cycle);
+                    
+                    Connection con_main =new jdbcconnect().initconn();
+                    readandstoremainfile main_obj = new readandstoremainfile(con_main);
+                    //truncate and update result_table
+                    main_obj.resultfile(bg, cycle);
+                    new datatoexcel().worksheet(bg,cycle,v1);
+                    w.suppress();
+                    updateta.append("\nExcel File is created");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    JOptionPane.showMessageDialog(updateta1,"EXCEL FILE FOR CYCLE "+cycle+" AND BILLING GROUP "+bg+" IS CREATED"); 
+            
+                
+            
+            
+            
+            con_main.close();
+            cashpayment_obj.con_close();
+            epayment_obj.con_close();
+            e_payment_date();
+            cash_payment_date();
+            }
+            con.close();
+            w.suppress();
+        }
+        catch(Exception e)
+        {
+            w.suppress();
+            System.out.print(e);
+            updateta.append("\nError: "+e);
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+            w.close();
+            
+        }
+        
+        
+         w.close();}
+                    }).start();
+    }//GEN-LAST:event_updatebtnActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JPasswordField pf = new JPasswordField();
+        int okCxl = JOptionPane.showConfirmDialog(null, pf, "ENTER ADMIN PASSWORD", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (okCxl == JOptionPane.OK_OPTION) {
+          String pass = new String(pf.getPassword());
+          System.err.println("You entered: " + pass);
+
+//    String pass=JOptionPane.showInputDialog(updateta1,"ENTER ADMIN PASSWORD"); 
+    try{
+        Connection con =new jdbcconnect().initconn();
+        String query="select count(*) as count1 from pspcl.admin_auth where password= '"+pass+"'";
+            Statement st1 = con.createStatement();
+            ResultSet rs1 =st1.executeQuery(query);
+            
+            if(rs1.next())
+            {
+                if(rs1.getInt("count1")>=1)
+                {
+                    
+                    System.out.println("admin check  "+true);
+                    this.dispose();
+                    new admin_form();
+                    con.close();
+                }
+                else
+            {
+                JOptionPane.showMessageDialog(updateta1,"INCORRECT PASSWORD, PLEASE TRY AGAIN"); 
+            }
+                
+            }
+            
+            con.close();
+            
+            }
+            catch(Exception e)
+            {
+                System.out.print(e);
+                updateta.append("\nError: "+e);
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void updatebtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updatebtnMouseEntered
+        updatebtn.setForeground(new Color(45,84,94));
+        updatebtn.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_updatebtnMouseEntered
+
+    private void uploadbtnMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadbtnMouseEntered
+        uploadbtn.setForeground(new Color(45,84,94));
+        uploadbtn.setBackground(new Color(255,255,255));
+    }//GEN-LAST:event_uploadbtnMouseEntered
+
+    private void uploadbtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_uploadbtnMouseExited
+        uploadbtn.setForeground(new Color(255,255,255));
+        uploadbtn.setBackground(new Color(45,84,94));
+    }//GEN-LAST:event_uploadbtnMouseExited
+
+    private void updatebtnMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updatebtnMouseExited
+        updatebtn.setForeground(new Color(255,255,255));
+        updatebtn.setBackground(new Color(45,84,94));
+    }//GEN-LAST:event_updatebtnMouseExited
 
     /**
      * @param args the command line arguments
@@ -356,30 +809,38 @@ public class main_frame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> bgcb;
     private javax.swing.JLabel cash_payment_date;
     private javax.swing.JLabel cash_payment_date1;
+    private javax.swing.JComboBox<String> cyclecb;
     private javax.swing.JLabel e_payment_date;
     private javax.swing.JLabel e_payment_date1;
-    private javax.swing.JButton exit_button;
+    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel jpb1;
     private javax.swing.JButton updatebtn;
     private javax.swing.JTextArea updateta;
+    private javax.swing.JLabel updateta1;
     private javax.swing.JButton uploadbtn;
     // End of variables declaration//GEN-END:variables
 
@@ -393,7 +854,7 @@ void fetch_detail()
         // d.height = d.height + 200;
         jpb1.setPreferredSize(new Dimension(jpb1.getWidth(), jScrollPane1.getHeight()));
         repaint();
-
+        al2.clear();
         al1.clear();
         try{
         Connection con = new jdbcconnect().initconn();
@@ -417,20 +878,20 @@ void fetch_detail()
         }
         catch(Exception e){
             System.out.println(e);
+            updateta.append("\nNO DATA FOUND ");
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
         }
         
         
 }
 void printfollowing() {
         for (int i = 0; i < al1.size(); i++) {
-            JPanel jp = new JPanel();
             
+            JPanel jp = new JPanel();
+            al2.add(jp);
 
-            if (i % 2 == 0) {
-                jp.setBackground(new Color(109, 121, 147));
-            } else {
-                jp.setBackground(new Color(182, 161, 158));
-            }
+
+                jp.setBackground(new Color(49, 61, 75));
             Border border;
             border = new BevelBorder(EtchedBorder.RAISED, new Color(63, 50, 80), new Color(213, 213, 213));
             jp.setBorder(border);
@@ -473,9 +934,32 @@ void printfollowing() {
                     new Thread(new Runnable() {
                         public void run() {
                             
+                            for(int i=0;i<al2.size();i++)
+                            {
+                                if(al2.get(i)==jp)
+                                {
+                                    al2.get(i).setBackground(new Color(98,98,98));
+                                }
+                                else
+                                {
+                                    al2.get(i).setBackground(new Color(49, 61, 75));
+                                }
+                            }
                             JLabel jdate= (JLabel)jp.getComponent(2);
                             String date1=jdate.getText();
-                            System.out.println("value"+ date1);
+                            JLabel jbg= (JLabel)jp.getComponent(0);
+                            int bg=Integer.parseInt(jbg.getText());
+                            JLabel jc= (JLabel)jp.getComponent(1);
+                            int cycle=Integer.parseInt(jc.getText());
+                            int bg1=bg-1;
+                            int cycle1=cycle-1;
+                            bgcb.setSelectedIndex(bg1);
+                            cyclecb.setSelectedIndex(cycle1);
+                            bgcb.repaint();
+                            cyclecb.repaint();
+                            
+                            System.out.println("bg:cycle:date"+bg+" "+cycle+" "+date1);
+                           
                              LocalDate olddate = LocalDate.parse(date1);
                              LocalDate newdate=olddate.minusDays(50);
                             cash_payment_date1.setText(newdate+"");
@@ -495,7 +979,7 @@ void printfollowing() {
                 System.out.println("yes");
             }
             jp.setBounds(2, y3, jpb1.getWidth() - 2, 40);
-            y3 += 50;
+            y3 += 40;
             System.out.println("value of y3-----" + y3);
         }
     }
@@ -520,7 +1004,8 @@ void e_payment_date()
     }
         catch(Exception e)
         {
-            
+            updateta.append("\nError: "+e);
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);            
         }
    
 }
@@ -545,6 +1030,8 @@ void cash_payment_date()
         catch(Exception e)
         {
             System.out.println(e);
+            updateta.append("\nError: "+e);
+            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
         }
    
 }

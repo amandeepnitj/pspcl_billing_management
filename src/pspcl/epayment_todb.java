@@ -49,17 +49,25 @@ public class epayment_todb {
         }
     }
     
-    void e_paymentbasictable(String file_path)
+    void e_paymentbasictable(String file_path,int check)
     {
         int count=0;
         int batch_size=20;
-        try(
-                BufferedReader in = new BufferedReader(new FileReader(file_path))) {
-                String truncate="truncate table pspcl.basic_e_payment";
+        try{
+            String truncate="truncate table pspcl.basic_e_payment";
                 Statement st = con.createStatement();
                 st.execute(truncate);
                 con.commit();
                 System.out.println("basic_e_payment table truncated");
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+        if(check==1)
+        {try(
+                BufferedReader in = new BufferedReader(new FileReader(file_path))) {
+                
                 String str;
                 String sql = "INSERT INTO pspcl.basic_e_payment (account_no, amount,receiptid,receiptdate,partition_date) VALUES (?, ?, ? ,?,current_date)";
                 PreparedStatement statement = con.prepareStatement(sql);
@@ -131,6 +139,7 @@ public class epayment_todb {
                 catch (Exception e) {
                     System.out.println(e);
                 }
+        }
         System.out.println("basic_e_payment function completed");
         
     }
