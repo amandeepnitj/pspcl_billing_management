@@ -470,12 +470,27 @@ public class main_frame extends javax.swing.JFrame {
             w= new waiting();
             updateta.append("\nPROCESSING");
             updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+            String filepath=System.getProperty("user.home")+"\\Desktop\\pspcl\\webfile.txt";
+            File file= new File(filepath);
+            boolean mainfileexist=file.exists();
+            if(mainfileexist==false)
+            {
+                w.suppress();
+                updateta.append("\nWeb File does not exist");
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                
+                JOptionPane.showMessageDialog(updateta1,"Web file does not exist","ERROR",JOptionPane.ERROR_MESSAGE); 
+            }
+            else
+            {
+            
         try{
             
             Connection con_main =new jdbcconnect().initconn();
             con_main.setAutoCommit(false);
             readandstoremainfile main_obj = new readandstoremainfile(con_main);
-            String filepath=System.getProperty("user.home")+"\\Desktop\\pspcl\\webfile.txt";
+            
+            
             w.show();
             main_obj.readmainfile(filepath);
             boolean T53= main_obj.checkaccountno();
@@ -492,7 +507,12 @@ public class main_frame extends javax.swing.JFrame {
                 w.suppress();
                 updateta.append(update);
                 updateta.setCaretPosition(updateta.getDocument().getLength()-1);
-                
+                if(update=="\nData of Main File is already present in DB")
+                {
+                    JOptionPane.showMessageDialog(updateta1,update,"ERROR",JOptionPane.ERROR_MESSAGE);
+                    w.close();
+                    return;
+                }
                 
             }
             else
@@ -519,6 +539,7 @@ public class main_frame extends javax.swing.JFrame {
             
             updateta.setCaretPosition(updateta.getDocument().getLength()-1);
             w.close();
+        }
         }
         fetch_detail();
         w.close();

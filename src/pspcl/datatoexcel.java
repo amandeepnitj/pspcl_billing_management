@@ -5,19 +5,13 @@
  */
 package pspcl;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-import javax.swing.JWindow;
+import org.apache.poi.ss.formula.functions.Column;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
@@ -26,10 +20,17 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellUtil;
-import org.apache.poi.util.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTAutoFilter;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCustomFilter;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTCustomFilters;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTFilter;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTFilterColumn;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTRow;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STFilterOperator;
 /**
  *
  * @author amandeep
@@ -230,8 +231,43 @@ public class datatoexcel {
         sheet.autoSizeColumn(14);
         sheet.autoSizeColumn(15);
         sheet.setAutoFilter(new CellRangeAddress(cell_first.getRowIndex(), cell_last.getRowIndex(), cell_first.getColumnIndex(),cell_last.getColumnIndex()));
-        
-        
+        /* Step-1: Get the CTAutoFilter Object */
+		CTAutoFilter sheetFilter=sheet.getCTWorksheet().getAutoFilter();
+                CTFilterColumn  myFilterColumn=sheetFilter.insertNewFilterColumn(0);
+                /* Step-3: Set Filter Column ID */
+                myFilterColumn.setColId(13);
+                                /* Add a Custom Filter */
+                CTCustomFilters myCustomFilter=myFilterColumn.addNewCustomFilters();
+                /* Specify that this is an AND filter */
+//                myCustomFilter.setAnd(true);
+                /* Add filters */
+                CTCustomFilter myFilter1= myCustomFilter.addNewCustomFilter();  
+//                CTCustomFilter myFilter2= myCustomFilter.addNewCustomFilter();  
+                /* Does not Begin With Filter */                
+                myFilter1.setOperator(STFilterOperator.GREATER_THAN_OR_EQUAL);
+                myFilter1.setVal("200");  
+                /* Does not End With Filter */
+//                myFilter2.setOperator(STFilterOperator.NOT_EQUAL);
+//                myFilter2.setVal("*1");
+
+                
+                XSSFRow r1;
+                
+                int j=2;
+                /* Implement Multiple Custom Filter and Hide Rows that do not match */
+                for(Row r:sheet ) {
+                    
+                        for (Cell c : r) {
+                                if (c.getColumnIndex()==13) {
+                                        r1=(XSSFRow) c.getRow();
+                                        if (r1.getRowNum()>=2&&c.getNumericCellValue()<200) { /* Ignore top row */                                                                           
+                                            System.out.println(c.getNumericCellValue());           
+                                            r1.getCTRow().setHidden(true); }
+                                }                               
+                        }
+}
+//                Cell c1 = ;
+//                c1.getNumericCellValue().equals();
         wb.write(file);
        
     }   

@@ -169,6 +169,58 @@ public class readandstoremainfile {
         }
         else
         {
+            //check data same data already present in agg table or not 
+        //1 
+        query="select max(billing_date) from pspcl.basic_main_table";
+        
+        
+        
+        
+        Statement st01 = con.createStatement();
+        ResultSet rs01 =st01.executeQuery(query);
+        con.commit();
+        Calendar c = Calendar.getInstance();
+        java.util.Date olddate=c.getTime();
+        if(rs01.next())
+        {
+           System.out.println(rs01.getDate(1));
+           olddate=rs01.getDate(1);
+        }
+        else
+        {
+            //p=true;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        
+        c.setTime(olddate);
+        c.add(Calendar.DAY_OF_MONTH, 15); 
+        String newDate = sdf.format(c.getTime()); 
+        System.out.println("newdate "+newDate);
+        
+
+        //2
+        query="select account_no from pspcl.basic_main_table limit 1";
+        String account="";
+        st01 = con.createStatement();
+        rs01 =st01.executeQuery(query);
+        con.commit();
+        if(rs01.next())
+        {
+           account=rs01.getString(1);
+        }
+        
+        //3
+        query="select account_no from pspcl.agg_main_table where account_no='"+account+"' and start_date= '"+newDate+"'";
+        st01 = con.createStatement();
+        rs01 =st01.executeQuery(query);
+        con.commit();
+        if(rs01.next())
+        {
+           return "\nData of Main File is already present in DB";
+        }
+            
+            
+            
         //delete that BG from agg_table
         query="delete from pspcl.agg_main_table where billing_group="+bg+" and cycle="+cycle;
         st = con.createStatement();
@@ -241,7 +293,7 @@ public class readandstoremainfile {
 " left outer join (select account_no,amount from pspcl.final_payment where mode='c') t3 "+
 "on t1.account_no=t3.account_no "+
 "where cycle="+cycle+" and billing_group="+bg+") t4 "+
-") t5 where updated_amount>=200";
+") t5";
             st1 = con.createStatement();
             boolean p1 =st1.execute(query);
             System.out.println(p1);
