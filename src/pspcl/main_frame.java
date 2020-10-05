@@ -465,18 +465,37 @@ public class main_frame extends javax.swing.JFrame {
             w= new waiting();
             updateta.append("\nPROCESSING");
             updateta.setCaretPosition(updateta.getDocument().getLength()-1);
-            String filepath=System.getProperty("user.home")+"\\Desktop\\pspcl\\webfile.txt";
-            File file= new File(filepath);
-            boolean mainfileexist=file.exists();
-            if(mainfileexist==false)
-            {
+            File directoryPath = new File(System.getProperty("user.home")+"\\Desktop\\pspcl\\webfiles");
+            FilenameFilter textFilefilter = new FilenameFilter(){
+                   public boolean accept(File dir, String name) {
+                      String lowercaseName = name.toLowerCase();
+                      if (lowercaseName.endsWith(".txt")) {
+                         return true;
+                      } else {
+                         return false;
+                      }
+                   }
+                };
+                //List of all the text files
+                String filesList[] = directoryPath.list(textFilefilter);
                 w.suppress();
-                updateta.append("\nWeb File does not exist");
-                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                if(filesList.length==0)
+                {
+                    updateta.append("\n No Main File found");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    JOptionPane.showMessageDialog(updateta1,"No Main File found","ERROR",JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
+                else if(filesList.length>1)
+                {
+                    updateta.append("\n More than one Files found");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    JOptionPane.showMessageDialog(updateta1,"More than one Files found, please place only one file in folder","ERROR",JOptionPane.ERROR_MESSAGE); 
+                    return;
+                }
                 
-                JOptionPane.showMessageDialog(updateta1,"Web file does not exist","ERROR",JOptionPane.ERROR_MESSAGE); 
-            }
-            else
+            String filepath=System.getProperty("user.home")+"\\Desktop\\pspcl\\webfiles\\"+filesList[0];
+            
             {
             
         try{
@@ -536,6 +555,7 @@ public class main_frame extends javax.swing.JFrame {
             w.close();
         }
         }
+        
         fetch_detail();
         w.close();
          }
