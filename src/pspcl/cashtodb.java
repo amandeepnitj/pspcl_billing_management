@@ -27,16 +27,60 @@ public class cashtodb {
         this.con=con;
     }
     
-    void cashfilereadtodb(String cash_file,int c_1)
+    void remove_duplicate()
     {
+         try{
+            String truncate="create temporary table pspcl.cashpayment_temp as SELECT distinct account_no, amount,receiptid,receiptdate FROM pspcl.basic_cash_payment";
+            Statement st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            truncate="truncate table pspcl.basic_cash_payment";
+            st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            truncate="insert into pspcl.basic_cash_payment (account_no, amount,receiptid,receiptdate,partition_date) select account_no, amount,receiptid,receiptdate,current_date as partition_date from pspcl.cashpayment_temp";
+            st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            
+            truncate="drop temporary table pspcl.cashpayment_temp";
+            st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            
+            System.out.println("remove cash duplicate done");
+            } catch(Exception e){
+                System.out.println(e);
+            }
+         
+         
+    }
+    
+    String cashfilereadtodb(String cash_file)
+    {
+        
+        try{
+            String truncate="create temporary table pspcl.cashpayment_temp( "+
+            "account_no varchar(50), "+
+            "amount int, "+
+            "receiptid varchar(50), "+
+            "receiptdate date)";
+        
+        Statement st = con.createStatement();
+        st.execute(truncate);
+        con.commit();
+        System.out.println("pspcl.cashpayment_temp table created");
+        } catch(Exception e){
+            System.out.println(e);
+        }
         
         int count=0;
         int batch_size=20;
-        if(c_1==1)
-        {try(
+        
+        try(
                 BufferedReader in = new BufferedReader(new FileReader(cash_file))) {
                 String str;
-                String sql = "INSERT INTO pspcl.basic_cash_payment (account_no,amount,receiptid,receiptdate,partition_date) VALUES (?, ?, ?, ?,current_date)";
+                String sql = "INSERT INTO pspcl.cashpayment_temp (account_no,amount,receiptid,receiptdate) VALUES (?, ?, ?, ?)";
                 PreparedStatement statement = con.prepareStatement(sql);
                     String s= "0123456789";
                     while ((str = in.readLine()) != null) {
@@ -112,8 +156,35 @@ public class cashtodb {
         }
         catch (Exception e) {
             System.out.println(e);
+            return e+"";
         }
+        
+        //insert data to basic cashpayment
+        try{
+            String truncate="insert into pspcl.basic_cash_payment (account_no, amount,receiptid,receiptdate,partition_date) select account_no, amount,receiptid,receiptdate,current_date as partition_date from pspcl.cashpayment_temp";
+        
+            Statement st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            System.out.println("inserted data into basic_cash_payment table");
+            } catch(Exception e){
+                System.out.println(e);
+            }
+        
+        //drop temp table
+        try{
+            String truncate="drop temporary table pspcl.cashpayment_temp";
+        
+        Statement st = con.createStatement();
+        st.execute(truncate);
+        con.commit();
+        System.out.println("temporary table dropped");
+        } catch(Exception e){
+            System.out.println(e);
         }
+        
+        return "true";
+        
     }
     
     int validatewithstoredpayment() throws Exception

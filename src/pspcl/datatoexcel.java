@@ -264,9 +264,7 @@ public class datatoexcel {
                                             r1.getCTRow().setHidden(true); }
                                 }                               
                         }
-}
-//                Cell c1 = ;
-//                c1.getNumericCellValue().equals();
+        }
         wb.write(file);
        
     }   

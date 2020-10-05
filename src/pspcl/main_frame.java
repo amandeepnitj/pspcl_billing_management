@@ -573,6 +573,7 @@ public class main_frame extends javax.swing.JFrame {
             }
             else
             {
+                int v1=-1;
                 w.show();
                 Connection con_cashpayment =new jdbcconnect().initconn();
                 Connection con_epayment =new jdbcconnect().initconn();
@@ -583,7 +584,6 @@ public class main_frame extends javax.swing.JFrame {
 
                 System.out.println("bg= "+bg+" cycle= "+cycle);
                 boolean epaymentexist=false,cashpaymentexists=false;
-                int v1=-1;
                 //truncate both cash and epayment basic tables
                 epayment_obj.truncate_both_tables();
                 
@@ -613,10 +613,7 @@ public class main_frame extends javax.swing.JFrame {
                 
                 
                 
-                String excel_dir1 = System.getProperty("user.home")+"\\Desktop\\pspcl\\epaymentfiles\\"+fileName;
-                File file= new File(excel_dir1);
-                
-                
+                    String excel_dir1 = System.getProperty("user.home")+"\\Desktop\\pspcl\\epaymentfiles\\"+fileName;
                     w.suppress();
                     updateta.append("\nProcessing: "+fileName+" Epayment file is being inserted..");
                     updateta.setCaretPosition(updateta.getDocument().getLength()-1);
@@ -643,55 +640,81 @@ public class main_frame extends javax.swing.JFrame {
                     w.suppress();
                     updateta.append("\nNo E-payment file exists");
                     updateta.setCaretPosition(updateta.getDocument().getLength()-1);
-                    
+                    v1=2;
                     JOptionPane.showMessageDialog(updateta1,"No E-payment file exists"); 
                 }
                 else
                 {
+                    v1=0;
                     epayment_obj.remove_duplicate();
                 }
                 
                 
                 //cashpayment start
-                String cashfile = System.getProperty("user.home")+"\\Desktop\\pspcl\\cashpayment.txt";
                 
-                File file= new File(cashfile);
-                cashpaymentexists=file.exists();
-                if(cashpaymentexists==true)
+                //get all epayment files name
+                directoryPath = new File(System.getProperty("user.home")+"\\Desktop\\pspcl\\cashpaymentfiles");
+                textFilefilter = new FilenameFilter(){
+                   public boolean accept(File dir, String name) {
+                      String lowercaseName = name.toLowerCase();
+                      if (lowercaseName.endsWith(".txt")) {
+                         return true;
+                      } else {
+                         return false;
+                      }
+                   }
+                };
+                //List of all the text files
+                String filesList_cash[] = directoryPath.list(textFilefilter);
+                w.suppress();
+                updateta.append("\n"+filesList_cash.length+" Cashpayment files are found");
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+//                System.out.println("List of the text files in the specified directory:");
+                for(String fileName : filesList_cash) 
                 {
+                    String cashfile = System.getProperty("user.home")+"\\Desktop\\pspcl\\cashpaymentfiles\\"+fileName;
                     w.suppress();
-                    updateta.append("\nPROCESSING: Cashpayment file is being inserted..");
+                    updateta.append("\nPROCESSING:"+fileName+" file is being inserted..");
                     updateta.setCaretPosition(updateta.getDocument().getLength()-1);
                     
                     w.show();
-                    cashpayment_obj.cashfilereadtodb(cashfile,1);
+                    String s=cashpayment_obj.cashfilereadtodb(cashfile);
                     w.suppress();
+                    
+                    if(s=="true")
+                    {
+                        updateta.append("\nData Inserted : "+fileName);
+                        updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    }
+                    else
+                    {
+                        updateta.append("\nERROR: "+s);
+                        updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                        JOptionPane.showMessageDialog(updateta1,s); 
+                    }
+                
                 }
-                else
+                if(filesList_cash.length==0)
                 {
-                    w.show();
-                    cashpayment_obj.cashfilereadtodb(cashfile,0);
+                    if(v1==0)
+                    {
+                        v1=1;
+                    }
+                    else
+                        v1=3;
                     w.suppress();
-                    updateta.append("\nCash-payment file does not exist");
+                    updateta.append("\nNO Cashpayment file exists");
                     updateta.setCaretPosition(updateta.getDocument().getLength()-1);
                     
-                    JOptionPane.showMessageDialog(updateta1,"CASH-PAYMENT FILE DOES NOT EXIST"); 
-                }
-                if(epaymentexist==true && cashpaymentexists==true)
-                {
-                    v1=0;
-                }
-                else if(epaymentexist==true && cashpaymentexists==false)
-                {
-                    v1=1;
-                }
-                else if(epaymentexist==false && cashpaymentexists==true)
-                {
-                    v1=2;
+                    JOptionPane.showMessageDialog(updateta1,"No any cashpayment file exists"); 
                 }
                 else
-                    v1=3;
-
+                {
+                    
+                    cashpayment_obj.remove_duplicate();
+                }
+                
                 w.show();
                 int v= cashpayment_obj.validatewithstoredpayment();
                 w.suppress();
