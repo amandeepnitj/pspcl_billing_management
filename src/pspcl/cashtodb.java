@@ -29,16 +29,7 @@ public class cashtodb {
     
     void cashfilereadtodb(String cash_file,int c_1)
     {
-        try{
-            String truncate="truncate table pspcl.basic_cash_payment";
         
-        Statement st = con.createStatement();
-        st.execute(truncate);
-        con.commit();
-        System.out.println("basic_cash_payment table truncated");
-        } catch(Exception e){
-            System.out.println(e);
-        }
         int count=0;
         int batch_size=20;
         if(c_1==1)

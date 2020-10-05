@@ -49,12 +49,39 @@ public class epayment_todb {
         }
     }
     
-    void e_paymentbasictable(String file_path,int check)
+    void remove_duplicate()
     {
-        int count=0;
-        int batch_size=20;
+         try{
+            String truncate="create temporary table pspcl.epayment_temp as SELECT distinct account_no, amount,receiptid,receiptdate FROM pspcl.basic_e_payment";
+            Statement st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            truncate="truncate table pspcl.basic_e_payment";
+            st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            truncate="insert into pspcl.basic_e_payment (account_no, amount,receiptid,receiptdate,partition_date) select account_no, amount,receiptid,receiptdate,current_date as partition_date from pspcl.epayment_temp";
+            st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            
+            truncate="drop temporary table pspcl.epayment_temp";
+            st = con.createStatement();
+            st.execute(truncate);
+            con.commit();
+            
+            System.out.println("remove duplicate done");
+            } catch(Exception e){
+                System.out.println(e);
+            }
+         
+         
+    }
+    
+    void truncate_both_tables()
+    {
         try{
-            String truncate="truncate table pspcl.basic_e_payment";
+                String truncate="truncate table pspcl.basic_e_payment";
                 Statement st = con.createStatement();
                 st.execute(truncate);
                 con.commit();
@@ -64,12 +91,42 @@ public class epayment_todb {
         {
             System.out.println(e);
         }
-        if(check==1)
-        {try(
+        try{
+            String truncate="truncate table pspcl.basic_cash_payment";
+        
+        Statement st = con.createStatement();
+        st.execute(truncate);
+        con.commit();
+        System.out.println("basic_cash_payment table truncated");
+        } catch(Exception e){
+            System.out.println(e);
+        }
+    }
+    String e_paymentbasictable(String file_path)
+    {
+        int count=0;
+        int batch_size=20;
+        
+        try{
+            String truncate="create temporary table pspcl.epayment_temp( "+
+            "account_no varchar(50), "+
+            "amount int, "+
+            "receiptid varchar(50), "+
+            "receiptdate date)";
+        
+        Statement st = con.createStatement();
+        st.execute(truncate);
+        con.commit();
+        System.out.println("pspcl.epayment_temp table created");
+        } catch(Exception e){
+            System.out.println(e);
+        }
+        
+        try(
                 BufferedReader in = new BufferedReader(new FileReader(file_path))) {
                 
                 String str;
-                String sql = "INSERT INTO pspcl.basic_e_payment (account_no, amount,receiptid,receiptdate,partition_date) VALUES (?, ?, ? ,?,current_date)";
+                String sql = "INSERT INTO pspcl.epayment_temp (account_no, amount,receiptid,receiptdate) VALUES (?, ?, ? ,?)";
                 PreparedStatement statement = con.prepareStatement(sql);
                 boolean p=false;
                 while ((str = in.readLine()) != null) {
@@ -137,11 +194,35 @@ public class epayment_todb {
             
                 }
                 catch (Exception e) {
+                    
                     System.out.println(e);
+                    return e+"";
                 }
-        }
-        System.out.println("basic_e_payment function completed");
+        //insert temp data to epayment basic table
+        try{
+            String truncate="insert into pspcl.basic_e_payment (account_no, amount,receiptid,receiptdate,partition_date) select account_no, amount,receiptid,receiptdate,current_date as partition_date from pspcl.epayment_temp";
         
+        Statement st = con.createStatement();
+        st.execute(truncate);
+        con.commit();
+        System.out.println("inserted data into basic_e_payment table");
+        } catch(Exception e){
+            System.out.println(e);
+        }
+        
+        //drop temp table
+        try{
+            String truncate="drop temporary table pspcl.epayment_temp";
+        
+        Statement st = con.createStatement();
+        st.execute(truncate);
+        con.commit();
+        System.out.println("temporary table dropped");
+        } catch(Exception e){
+            System.out.println(e);
+        }
+        
+        return "true";
     }
     void con_close() throws Exception
     {

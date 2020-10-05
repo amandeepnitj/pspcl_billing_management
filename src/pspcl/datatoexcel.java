@@ -261,7 +261,6 @@ public class datatoexcel {
                                 if (c.getColumnIndex()==13) {
                                         r1=(XSSFRow) c.getRow();
                                         if (r1.getRowNum()>=2&&c.getNumericCellValue()<200) { /* Ignore top row */                                                                           
-                                            System.out.println(c.getNumericCellValue());           
                                             r1.getCTRow().setHidden(true); }
                                 }                               
                         }

@@ -12,6 +12,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FilenameFilter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -458,12 +459,6 @@ public class main_frame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void uploadbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadbtnActionPerformed
-//        new Thread(new Runnable() {
-//                        public void run() {
-//                            
-//                            updateta.append("\nPROCESSING");
-//                        }
-//                    }).start();
         
         new Thread(new Runnable() {
                         public void run() {
@@ -588,33 +583,79 @@ public class main_frame extends javax.swing.JFrame {
 
                 System.out.println("bg= "+bg+" cycle= "+cycle);
                 boolean epaymentexist=false,cashpaymentexists=false;
-                String excel_dir1 = System.getProperty("user.home")+"\\Desktop\\pspcl\\epayment.xls";
-                File file= new File(excel_dir1);
-                epaymentexist=file.exists();
                 int v1=-1;
-                if(epaymentexist==true)
+                //truncate both cash and epayment basic tables
+                epayment_obj.truncate_both_tables();
+                
+                //epayment start
+                //get all epayment files name
+                File directoryPath = new File(System.getProperty("user.home")+"\\Desktop\\pspcl\\epaymentfiles");
+                FilenameFilter textFilefilter = new FilenameFilter(){
+                   public boolean accept(File dir, String name) {
+                      String lowercaseName = name.toLowerCase();
+                      if (lowercaseName.endsWith(".xls")) {
+                         return true;
+                      } else {
+                         return false;
+                      }
+                   }
+                };
+                //List of all the text files
+                String filesList[] = directoryPath.list(textFilefilter);
+                w.suppress();
+                updateta.append("\n"+filesList.length+" Epayment files are found..");
+                updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+//                System.out.println("List of the text files in the specified directory:");
+                for(String fileName : filesList) 
                 {
+                   System.out.println(fileName);
+                
+                
+                
+                String excel_dir1 = System.getProperty("user.home")+"\\Desktop\\pspcl\\epaymentfiles\\"+fileName;
+                File file= new File(excel_dir1);
+                
+                
                     w.suppress();
-                    updateta.append("\nPROCESSING: EPAYMENT FILE IS BEING INSERTED.....");
+                    updateta.append("\nProcessing: "+fileName+" Epayment file is being inserted..");
                     updateta.setCaretPosition(updateta.getDocument().getLength()-1);
                     
                     w.show();
-                    epayment_obj.e_paymentbasictable(excel_dir1,1);
+                    String s=epayment_obj.e_paymentbasictable(excel_dir1);
                     w.suppress();
+                    if(s=="true")
+                    {
+                        updateta.append("\nData Inserted : "+fileName);
+                        updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    }
+                    else
+                    {
+                        updateta.append("\nERROR: "+s);
+                        updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                        JOptionPane.showMessageDialog(updateta1,s); 
+                    }
+                
+                
+                } 
+                if(filesList.length==0)
+                {
+                    w.suppress();
+                    updateta.append("\nNo E-payment file exists");
+                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
+                    
+                    JOptionPane.showMessageDialog(updateta1,"No E-payment file exists"); 
                 }
                 else
                 {
-                    w.suppress();
-                    epayment_obj.e_paymentbasictable(excel_dir1,0);
-                    updateta.append("\nE-payment file does not exist");
-                    updateta.setCaretPosition(updateta.getDocument().getLength()-1);
-                    
-                    JOptionPane.showMessageDialog(updateta1,"E-PAYMENT FILE DOES NOT EXIST"); 
+                    epayment_obj.remove_duplicate();
                 }
-
+                
+                
+                //cashpayment start
                 String cashfile = System.getProperty("user.home")+"\\Desktop\\pspcl\\cashpayment.txt";
-
-                file= new File(cashfile);
+                
+                File file= new File(cashfile);
                 cashpaymentexists=file.exists();
                 if(cashpaymentexists==true)
                 {
