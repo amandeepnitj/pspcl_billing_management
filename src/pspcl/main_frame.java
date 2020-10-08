@@ -1080,7 +1080,7 @@ void printfollowing() {
                 Dimension d = jpb1.getPreferredSize();
                 d.height = d.height + 40;
                 jpb1.setPreferredSize(d);
-                jpb1.setBounds(0, 0, jScrollPane1.getWidth(), jpb1.getHeight() + 40);
+                jpb1.setBounds(0, 0, jScrollPane1.getWidth(), jpb1.getHeight() + 42);
                 System.out.println("yes");
             }
             jp.setBounds(2, y3, jpb1.getWidth() - 2, 40);
