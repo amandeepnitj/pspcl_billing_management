@@ -22,7 +22,7 @@ public class jdbcconnect {
     {
         
             Class.forName("com.mysql.jdbc.Driver");  
-            conn=DriverManager.getConnection("jdbc:mysql://localhost:3306","root","iamthebest");  
+            conn=DriverManager.getConnection("jdbc:mysql://localhost:3305","root","admin");  
             
         return conn;
     }
