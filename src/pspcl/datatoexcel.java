@@ -101,7 +101,12 @@ public class datatoexcel {
             e_max_date="";
         }
        
-    
+        Connection con_cashpayment =new jdbcconnect().initconn();
+        con_cashpayment.setAutoCommit(false);
+        cashtodb cashpayment_obj = new cashtodb(con_cashpayment);
+        cashpayment_obj.payment_update(bg, cycle, cash_max_date, e_max_date);
+        cashpayment_obj.con_close();
+        
         CellStyle style2 =wb.createCellStyle();
         XSSFFont font1=wb.createFont();
         font1.setBold(true);
