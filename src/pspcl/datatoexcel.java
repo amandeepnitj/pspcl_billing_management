@@ -69,15 +69,15 @@ public class datatoexcel {
         Statement st1; 
         ResultSet rs1 ;
         
-        query="select max(receiptdate) as maxr from pspcl.basic_e_payment";
+        query="select max(receiptdate) as maxr from pspcl.agg_stored_payment where mode='e'";
         st1 = con.createStatement();
         rs1 =st1.executeQuery(query);
         if(rs1.next())
         {
             e_max_date=rs1.getString("maxr");
         }
-        
-        query="select max(receiptdate) as maxr from pspcl.basic_cash_payment";
+        System.out.println("e_max_date --- "+e_max_date);
+        query="select max(receiptdate) as maxr from pspcl.agg_stored_payment where mode='c'";
         st1 = con.createStatement();
         rs1 =st1.executeQuery(query);
         
@@ -86,7 +86,11 @@ public class datatoexcel {
         {
             cash_max_date=rs1.getString("maxr");
         }
-        
+        System.out.println("cash_max_date --- "+cash_max_date);
+        if(cash_max_date==null)
+            cash_max_date="";
+        if(e_max_date==null)
+            e_max_date="";
         if(v==1)
         {
             cash_max_date="";
@@ -100,7 +104,11 @@ public class datatoexcel {
             cash_max_date="";
             e_max_date="";
         }
-       
+        Connection con_cashpayment =new jdbcconnect().initconn();
+        con_cashpayment.setAutoCommit(false);
+        cashtodb cashpayment_obj = new cashtodb(con_cashpayment);
+        cashpayment_obj.payment_update(bg, cycle, cash_max_date, e_max_date);
+        cashpayment_obj.con_close();
     
         CellStyle style2 =wb.createCellStyle();
         XSSFFont font1=wb.createFont();
@@ -266,6 +274,6 @@ public class datatoexcel {
                         }
         }
         wb.write(file);
-       
+        wb.close();
     }   
 }

@@ -60,9 +60,9 @@ public class main_frame extends javax.swing.JFrame {
         Font f= updateta.getFont();
         Font f1= new Font(f.getFontName(),f.getStyle(),f.getSize()+5);
         updateta.setFont(f1);
-        e_payment_date();
+        
         fetch_detail();
-        cash_payment_date();
+        
     }
 
     /**
@@ -793,8 +793,8 @@ public class main_frame extends javax.swing.JFrame {
             con_main.close();
             cashpayment_obj.con_close();
             epayment_obj.con_close();
-            e_payment_date();
-            cash_payment_date();
+            payment_fetch(bg,cycle);
+            
             }
             con.close();
             w.suppress();
@@ -974,6 +974,7 @@ void fetch_detail()
                System.out.println(al1.size());
         }
         LocalDate olddate = LocalDate.parse(al1.get(0).date);
+        payment_fetch(al1.get(0).billing_group,al1.get(0).billing_cycle);
         LocalDate newdate=olddate.minusDays(50);
         cash_payment_date1.setText(newdate+"");
         e_payment_date1.setText(newdate+"");
@@ -1056,6 +1057,7 @@ void printfollowing() {
                             int bg=Integer.parseInt(jbg.getText());
                             JLabel jc= (JLabel)jp.getComponent(1);
                             int cycle=Integer.parseInt(jc.getText());
+                            payment_fetch(bg,cycle);
                             int bg1=bg-1;
                             int cycle1=cycle-1;
                             bgcb.setSelectedIndex(bg1);
@@ -1089,21 +1091,24 @@ void printfollowing() {
         }
     }
                     
-void e_payment_date()
+void payment_fetch(int bg,int cycle)
 {
     try{
         Connection con = new jdbcconnect().initconn();
         
-        String query="select max(receiptdate) as date1 from pspcl.basic_e_payment";
+        String query="select cash_date,e_date from pspcl.payment_update where billing_group="+bg+" and cycle="+cycle;
         Statement st1 = con.createStatement();
         ResultSet rs1 =st1.executeQuery(query);
-        String date ="";
+        String e_date ="";
+        String cash_date="";
 //        con.commit();
         if(rs1.next())
         {
-            date=rs1.getString("date1");
+            e_date=rs1.getString("e_date");
+            cash_date=rs1.getString("cash_date");
         }
-        e_payment_date.setText(date);
+        e_payment_date.setText(e_date);
+        cash_payment_date.setText(cash_date);
         con.close();
         
     }
@@ -1115,31 +1120,7 @@ void e_payment_date()
    
 }
 
-void cash_payment_date()
-{
-    try{
-        Connection con = new jdbcconnect().initconn();
-        
-        String query="select max(receiptdate) as date1 from pspcl.basic_cash_payment";
-        Statement st1 = con.createStatement();
-        ResultSet rs1 =st1.executeQuery(query);
-        String date ="";
-//        con.commit();
-        if(rs1.next())
-        {
-            date=rs1.getString("date1");
-        }
-        cash_payment_date.setText(date);
-        con.close();
-    }
-        catch(Exception e)
-        {
-            System.out.println(e);
-            updateta.append("\nError: "+e);
-            updateta.setCaretPosition(updateta.getDocument().getLength()-1);
-        }
-   
-}
+
 
 }
 

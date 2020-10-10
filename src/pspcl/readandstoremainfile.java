@@ -327,6 +327,7 @@ public class readandstoremainfile {
         }
         catch(Exception e)
         {
+            System.out.println("error in resultfile func:");
             System.out.println(e);
         }
        
